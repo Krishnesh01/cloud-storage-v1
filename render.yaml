@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: cloud-storage-backend
+    runtime: node
+    rootDir: cloud-storage-backend-main/cloud-storage-backend-main/cloud-file-storage-aws
+    plan: starter
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: cloud-storage-data
+      mountPath: /var/lib/cloud-storage
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_ORIGIN
+        value: https://cloud-storage-frontend1-master.vercel.app
+      - key: ALLOW_VERCEL_ORIGINS
+        value: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: MAX_FILE_SIZE_BYTES
+        value: 26214400
+      - key: SIGNED_URL_EXPIRES_SECONDS
+        value: 3600
+      - key: DATA_DIR
+        value: /var/lib/cloud-storage
+      - key: JWT_SECRET
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        sync: false
+      - key: AWS_BUCKET_NAME
+        sync: false
